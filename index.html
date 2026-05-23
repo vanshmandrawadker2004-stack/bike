@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Optimization -->
+    <title>TorqueTrails | Pune's Gemini-style Motorcycle Route Planner</title>
+    <meta name="description" content="Discover Pune's finest motorcycle viewpoints, ghats, and loops with a modern, Gemini-styled web interface. Built with Leaflet.js maps.">
+    <meta name="keywords" content="motorcycle routes Pune, Lonavala ride, Lavasa ride, Duke's Nose, Ekole Valley, Kasarsai Dam, Kamshet, riding spots Pune">
+    
+    <!-- Stylesheets & Fonts -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Leaflet Map Engine CDNs -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <div id="app" class="state-initial">
+        <!-- Left Sidebar (Recent Rides/Chat History style) -->
+        <aside class="app-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="menu-btn" aria-label="Toggle Menu">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </button>
+                <button class="new-trip-btn" id="new-trip-btn" aria-label="New Trip">
+                    <span class="plus-icon">+</span>
+                    <span class="btn-text">New Trip</span>
+                </button>
+            </div>
+            
+            <div class="sidebar-content">
+                <div class="sidebar-label">Recent Rides</div>
+                <ul class="recent-list" id="sidebar-rides-list">
+                    <!-- Dynamically populated from JS -->
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <div class="main-container">
+            <!-- Main Header -->
+            <header class="main-header">
+                <div class="brand">Torque<span>Trails</span></div>
+                <div class="user-profile">
+                    <div class="avatar" aria-label="User Avatar">T</div>
+                </div>
+            </header>
+
+            <!-- Workspace Content Canvas -->
+            <main class="workspace-canvas">
+                <!-- Hero State Container (Centered before search) -->
+                <div class="hero-container" id="hero-container">
+                    <h1 class="hero-heading">Where should we ride?</h1>
+                </div>
+
+                <!-- Split results section (Active after choosing route) -->
+                <section id="results-section" aria-label="Ride Details and Map" aria-live="polite">
+                    <!-- Dynamically populated via app.js -->
+                </section>
+
+                <!-- Floating Search Box Container (Bottom/Center aligned) -->
+                <div class="search-box-container" id="search-box-container">
+                    <div class="search-box-wrapper">
+                        <div class="search-box">
+                            <!-- Left: plus icon button -->
+                            <button class="box-action-btn" aria-label="Add Detail">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                                </svg>
+                            </button>
+                            
+                            <!-- Middle: Text Input -->
+                            <input type="text" id="user-prompt" placeholder="Ask TorqueTrails..." aria-label="Type your ride preference">
+                            
+                            <!-- Right: Model Pill Badge & Send Icon -->
+                            <div class="model-badge" aria-label="Model Version">
+                                <span>Flash 3.5</span>
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                                    <path d="M7 10l5 5 5-5z"/>
+                                </svg>
+                            </div>
+                            
+                            <button class="send-btn" id="search-btn" aria-label="Search button">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="disclaimer-text">TorqueTrails can provide incorrect road suggestions. Double check critical trails.</div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>
