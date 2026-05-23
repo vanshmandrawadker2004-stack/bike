@@ -196,10 +196,10 @@ searchInput.addEventListener("keypress", (e) => {
 
 // Search Matching logic (Connects to our secure Vercel Serverless Backend /api/search)
 async function executeSearch() {
-    const textQuery = searchInput.value.trim();
-    appState.query = textQuery;
+    const userInput = searchInput.value.trim();
+    appState.query = userInput;
     
-    if (!textQuery) return;
+    if (!userInput) return;
     
     showLoading(true);
 
@@ -210,28 +210,28 @@ async function executeSearch() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ query: textQuery })
+            body: JSON.stringify({ query: userInput })
         });
 
         if (!response.ok) {
             throw new Error(`Server responded with status ${response.status}`);
         }
 
-        const jsonResult = await response.json();
+        const data = await response.json();
         
-        const lat = parseFloat(jsonResult.latitude);
-        const lng = parseFloat(jsonResult.longitude);
+        const lat = parseFloat(data.latitude);
+        const lng = parseFloat(data.longitude);
 
         if (isNaN(lat) || isNaN(lng)) {
             throw new Error("Invalid coordinate values returned from API endpoint.");
         }
 
-        const matchedId = jsonResult.matchedLocation.toLowerCase().replace(/[^a-z0-9]/g, "");
+        const matchedId = data.matchedLocation.toLowerCase().replace(/[^a-z0-9]/g, "");
 
         // Construct dynamic spot object using server-grounded response
         const dynamicSpot = {
             id: matchedId,
-            name: jsonResult.matchedLocation,
+            name: data.matchedLocation,
             tagline: "Live Grounded Search Route",
             type: "viewpoint",
             distance: "Live Data",
@@ -239,12 +239,12 @@ async function executeSearch() {
             twistyIndex: 4.5,
             roadQuality: "mixed",
             roadQualityText: "Real-time road conditions search generated.",
-            pitstop: jsonResult.recommendedChaiStop,
+            pitstop: data.recommendedChaiStop,
             coordinates: {
                 lat: lat,
                 lng: lng
             },
-            aiCommentary: jsonResult.aiReasoning
+            aiCommentary: data.aiReasoning
         };
 
         appState.matchingTrails = [dynamicSpot];
@@ -252,7 +252,7 @@ async function executeSearch() {
 
         // Highlight matching sidebar item if name matches one of our local recent rides
         renderSidebarRides(spotsDatabase);
-        const localMatch = spotsDatabase.find(s => s.id === matchedId || s.name.toLowerCase().includes(jsonResult.matchedLocation.toLowerCase()));
+        const localMatch = spotsDatabase.find(s => s.id === matchedId || s.name.toLowerCase().includes(data.matchedLocation.toLowerCase()));
         if (localMatch) {
             const sidebarItem = sidebarList.querySelector(`[data-id="${localMatch.id}"]`);
             if (sidebarItem) {
@@ -264,7 +264,7 @@ async function executeSearch() {
         executeDisplay();
     } catch (error) {
         console.error("Vercel Search API error, falling back locally:", error);
-        executeLocalSearchFallback(textQuery);
+        executeLocalSearchFallback(userInput);
     } finally {
         showLoading(false);
     }
